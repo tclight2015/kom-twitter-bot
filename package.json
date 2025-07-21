@@ -1,0 +1,9 @@
+{
+  "name": "kom-twitter-bot",
+  "version": "1.0.0",
+  "main": "post.js",
+  "license": "MIT",
+  "dependencies": {
+    "twitter-api-v2": "^1.14.0"
+  }
+}
