@@ -1,36 +1,38 @@
 const { TwitterApi } = require('twitter-api-v2');
 
-// === 這裡填入最新的 API 金鑰 ===
 const client = new TwitterApi({
-  appKey: 'pqhZiHNokVlWoqYjNbRe4OJYW',
-  appSecret: '0vXkTfdrDdNKd9BA660841uHo7DxdKQbq7jjTsQf3d32H4DQDK',
-  accessToken: '1947113080024109056-XCJkKOtMuJ3hcrLe33pbFyh75QbGKi',
-  accessSecret: 'vYvVgM1KVh4lFOlBYJiwJl4zvkoulnXgKTwjPoFoDorFa'
+  appKey: process.env.API_Key,
+  appSecret: process.env.API_Key_Secret,
+  accessToken: process.env.Access_Token,
+  accessSecret: process.env.Access_Token_Secret
 });
 
-// === 詞庫 ===
+const rwClient = client.readWrite;
+
 const messages = [
-  "🚀 KOM forever!",
-  "💥 Another day, another meme!",
-  "🔥 KOM daily update!",
-  "😎 Meme coins never sleep. Neither do we.",
+  "🔥 HODL... or not? I don’t care. KOM forever!",
+  "😆 Meme coins never sleep. Neither do we.",
   "👑 King of Meme here. Bow down!",
-  "⚡️ Your financial advisor warned you about this tweet.",
+  "🌀 The market is chaos… just how we like it.",
+  "🤔 When in doubt, just buy more KOM.",
+  "😎 Serious traders hate us, but we love memes.",
+  "🎯 Another day, another meme. KOM lives on!",
+  "⚡ Your financial advisor warned you about this tweet.",
   "🐸 Frog season is over. KOM season begins!",
-  "🛸 Forget fundamentals. KOM is pure meme magic.",
-  "💎 HODL... or not? I don't care. KOM forever!",
-  "When in doubt, just buy more KOM."
+  "🕶️ Buying KOM is a lifestyle, not an investment.",
+  "🤣 Laugh your way to the moon 🌑 with KOM!",
+  "🔔 Forget fundamentals. KOM is pure meme magic."
 ];
 
-// === 隨機挑一條發文 ===
-const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+// 隨機挑選訊息
+const message = messages[Math.floor(Math.random() * messages.length)];
 
+// 發布推文
 (async () => {
   try {
-    const tweet = await client.v2.tweet(randomMessage);
-    console.log(`✅ Tweet 成功！Tweet ID: ${tweet.data.id}`);
+    const response = await rwClient.v2.tweet(message);
+    console.log("Tweet 發送成功！Tweet ID:", response.data.id);
   } catch (error) {
-    console.error('❌ 發文失敗:', error);
+    console.error("Tweet 發送失敗！錯誤訊息:", error);
   }
 })();
-
