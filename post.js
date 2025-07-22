@@ -10,12 +10,23 @@ const client = new TwitterApi({
   accessSecret: process.env.Access_Token_Secret,
 });
 
-// 👇 改這裡，讀取外部 messages.json
+// 外部 messages
 const messages = JSON.parse(fs.readFileSync(path.join(__dirname, 'messages.json'), 'utf-8'));
+
+// 預設 hashtag 池
+const hashtags = ['#KOM', '#KingOfMeme', '#MemeCoin', '#Crypto', '#TrumpMeme', '#MakeMemesGreatAgain'];
+
+function getRandomHashtags() {
+  const shuffled = hashtags.sort(() => 0.5 - Math.random());
+  const count = Math.floor(Math.random() * 3) + 1; // 1~3 個 hashtag
+  return shuffled.slice(0, count).join(' ');
+}
 
 async function postTweetWithRandomImage() {
   try {
     const message = messages[Math.floor(Math.random() * messages.length)];
+    const hashtagString = getRandomHashtags();
+    const fullMessage = `${message} ${hashtagString}`;
 
     const imagesDir = path.join(__dirname, 'assets');
     const files = fs.readdirSync(imagesDir).filter(file =>
@@ -32,7 +43,7 @@ async function postTweetWithRandomImage() {
 
     const mediaId = await client.v1.uploadMedia(imagePath);
     const tweet = await client.v2.tweet({
-      text: message,
+      text: fullMessage,
       media: { media_ids: [mediaId] },
     });
 
