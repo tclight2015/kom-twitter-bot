@@ -10,19 +10,13 @@ const client = new TwitterApi({
   accessSecret: process.env.Access_Token_Secret,
 });
 
-const messages = [
-  "🔥 KOM forever! Meme magic is real.",
-  "🤣 Laugh your way to the moon 🌕 with KOM!",
-  "🚀 King of Meme strikes again!",
-  "🕶️ Meme lifestyle = KOM lifestyle.",
-  "😂 KOM = Chaos On Memes!"
-];
+// 👇 改這裡，讀取外部 messages.json
+const messages = JSON.parse(fs.readFileSync(path.join(__dirname, 'messages.json'), 'utf-8'));
 
 async function postTweetWithRandomImage() {
   try {
     const message = messages[Math.floor(Math.random() * messages.length)];
 
-    // 讀取 assets 資料夾內所有圖片檔名
     const imagesDir = path.join(__dirname, 'assets');
     const files = fs.readdirSync(imagesDir).filter(file =>
       /\.(jpg|jpeg|png|gif)$/i.test(file)
@@ -33,7 +27,6 @@ async function postTweetWithRandomImage() {
       return;
     }
 
-    // 隨機挑一張圖片
     const randomImage = files[Math.floor(Math.random() * files.length)];
     const imagePath = path.join(imagesDir, randomImage);
 
